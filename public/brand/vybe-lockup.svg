@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 120" role="img" aria-label="VYBE">
+  <title>VYBE</title>
+  <g fill="none" stroke-linecap="round" stroke-width="17">
+    <path d="M30 30 L60 80" stroke="#7A2348"/>
+    <path d="M90 21 L60 80" stroke="#D6455F"/>
+  </g>
+  <circle cx="60" cy="80" r="10.5" fill="#F5A65B"/>
+  <!-- The wordmark is set in the host's own grotesque. A web surface that cannot load a
+       font file still renders the brand rather than a fallback that looks broken. -->
+  <text x="150" y="82" fill="#220E18" font-size="62" letter-spacing="8.5"
+        font-family="'Avenir Next','Helvetica Neue',Helvetica,Arial,sans-serif"
+        font-weight="600">VYBE</text>
+</svg>

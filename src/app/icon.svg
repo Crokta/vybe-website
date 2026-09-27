@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="VYBE">
+  <title>VYBE</title>
+  <!-- Two paths converging on one point. The disc is the table they agreed on. -->
+  <g fill="none" stroke-linecap="round" stroke-width="17.0">
+    <path d="M30 30 L60.0 80.0" stroke="#7A2348"/>
+    <path d="M90.0 21.0 L60.0 80.0" stroke="#D6455F"/>
+  </g>
+  <circle cx="60.0" cy="80.0" r="10.5" fill="#F5A65B"/>
+</svg>

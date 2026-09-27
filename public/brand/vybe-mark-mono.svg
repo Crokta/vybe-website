@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" role="img" aria-label="VYBE">
+  <title>VYBE</title>
+  <!-- One ink. For embossing, favicons at 16px, and anywhere colour cannot be trusted. -->
+  <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="17.0">
+    <path d="M30 30 L60.0 80.0"/>
+    <path d="M90.0 21.0 L60.0 80.0"/>
+  </g>
+  <circle cx="60.0" cy="80.0" r="10.5" fill="currentColor"/>
+</svg>
