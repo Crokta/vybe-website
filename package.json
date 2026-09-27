@@ -3,9 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port ${PORT:-3200}",
+    "dev": "next dev --port ${PORT:-3300}",
     "build": "next build",
-    "start": "next start --port ${PORT:-3200}",
+    "start": "next start --port ${PORT:-3300}",
     "lint": "eslint",
     "format": "prettier --write src",
     "typecheck": "next typegen && tsc --noEmit"

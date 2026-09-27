@@ -1,12 +1,19 @@
 "use server";
 
+import { createHash } from "node:crypto";
+import { headers } from "next/headers";
+
 /*
  * The two things a visitor can hand us: a place on the waitlist and a partner enquiry.
  *
- * The platform has no public intake endpoint yet, so each submission is validated here and
- * forwarded to a webhook named in the environment (a CRM, a form backend, or a BFF route once
- * one exists). Without one configured — local development — it is logged instead, so the forms
- * are exercisable end to end without any backend running.
+ * Each is validated here, then handed to the admin BFF's intake routes through the gateway —
+ * `POST /admin/v1/intake/waitlist` (Identity owns the waitlist) and
+ * `POST /admin/v1/intake/partner-enquiries` (Marketplace owns enquiries). Operations works
+ * both in the backoffice under Leads.
+ *
+ * This runs on the server, so the intake key never reaches a browser. With `VYBE_API_URL`
+ * unset — the site on its own, without the platform running — submissions are logged
+ * instead, so the forms still work end to end.
  *
  * Waitlist capture is deliberately minimal: what is needed to select a cohort and nothing more
  * (PRD GRW-01).
@@ -30,31 +37,62 @@ const text = (data: FormData, key: string, max = 200) =>
     .trim()
     .slice(0, max);
 
-async function forward(kind: "waitlist" | "partner", payload: Record<string, string>) {
-  const url = kind === "waitlist" ? process.env.WAITLIST_WEBHOOK_URL : process.env.PARTNER_WEBHOOK_URL;
-  const body = { kind, submittedAt: new Date().toISOString(), ...payload };
+type IntakeOutcome = "ok" | "rate_limited" | "failed";
 
-  if (!url) {
-    console.info(`[vybe-website] ${kind} submission (no webhook configured)`, body);
-    return true;
+const intakePaths = {
+  waitlist: "/admin/v1/intake/waitlist",
+  partner: "/admin/v1/intake/partner-enquiries",
+} as const;
+
+/**
+ * A stable, anonymous handle for the visitor, sent as X-Device-Id. The platform partitions its
+ * write rate limit by it, so one noisy visitor is slowed without slowing everyone else who
+ * reaches the platform through this server. Hashed: the platform never sees the address.
+ */
+async function visitorHandle() {
+  const h = await headers();
+  const ip = h.get("x-forwarded-for")?.split(",")[0]?.trim() || h.get("x-real-ip") || "unknown";
+  const digest = createHash("sha256")
+    .update(`${ip}|${h.get("user-agent") ?? ""}|${process.env.VYBE_INTAKE_KEY ?? ""}`)
+    .digest("hex");
+  return `web-${digest.slice(0, 32)}`;
+}
+
+async function intake(kind: keyof typeof intakePaths, payload: Record<string, string>): Promise<IntakeOutcome> {
+  const base = process.env.VYBE_API_URL?.replace(/\/$/, "");
+  const body = { ...payload, source: "website" };
+
+  if (!base) {
+    console.info(`[vybe-website] ${kind} submission (VYBE_API_URL not set, not sent)`, body);
+    return "ok";
   }
 
   try {
-    const response = await fetch(url, {
+    const response = await fetch(`${base}${intakePaths[kind]}`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
-        ...(process.env.FORMS_WEBHOOK_SECRET ? { authorization: `Bearer ${process.env.FORMS_WEBHOOK_SECRET}` } : {}),
+        accept: "application/json",
+        "x-vybe-intake-key": process.env.VYBE_INTAKE_KEY ?? "",
+        "x-device-id": await visitorHandle(),
       },
       body: JSON.stringify(body),
       signal: AbortSignal.timeout(8000),
+      cache: "no-store",
     });
-    return response.ok;
+
+    if (response.ok) return "ok";
+    if (response.status === 429) return "rate_limited";
+
+    console.error(`[vybe-website] ${kind} intake refused`, response.status, await response.text().catch(() => ""));
+    return "failed";
   } catch (error) {
-    console.error(`[vybe-website] ${kind} webhook failed`, error);
-    return false;
+    console.error(`[vybe-website] ${kind} intake unreachable`, error);
+    return "failed";
   }
 }
+
+const tooMany = "You've tried a few times in a row. Give it a minute and try again.";
 
 export async function joinWaitlist(_prev: FormState, data: FormData): Promise<FormState> {
   // Honeypot: a person never sees this field, so anything in it came from a bot. Pretend it worked.
@@ -82,11 +120,11 @@ export async function joinWaitlist(_prev: FormState, data: FormData): Promise<Fo
     };
   }
 
-  const ok = await forward("waitlist", { firstName, email, area });
-  if (!ok) {
+  const outcome = await intake("waitlist", { firstName, email, area });
+  if (outcome !== "ok") {
     return {
       status: "error",
-      message: "We couldn't save that just now. Please try again in a minute.",
+      message: outcome === "rate_limited" ? tooMany : "We couldn't save that just now. Please try again in a minute.",
       values: { firstName, email, area },
     };
   }
@@ -124,11 +162,12 @@ export async function submitPartnerEnquiry(_prev: FormState, data: FormData): Pr
     return { status: "error", message: "A couple of things need fixing.", fieldErrors, values };
   }
 
-  const ok = await forward("partner", values);
-  if (!ok) {
+  const outcome = await intake("partner", values);
+  if (outcome !== "ok") {
     return {
       status: "error",
-      message: "We couldn't send that just now. Please try again, or email us directly.",
+      message:
+        outcome === "rate_limited" ? tooMany : "We couldn't send that just now. Please try again, or email us directly.",
       values,
     };
   }

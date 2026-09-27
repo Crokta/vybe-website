@@ -8,12 +8,12 @@ Next.js 16 (App Router) · Tailwind CSS 4 · TypeScript · pnpm.
 ```bash
 cp .env.example .env.local
 pnpm install
-pnpm dev            # http://localhost:3200 (Grafana already owns :3000)
+pnpm dev            # http://localhost:3300 (Grafana has :3000, Tempo :3200)
 ```
 
 | Script | |
 |---|---|
-| `pnpm dev` | Dev server on `$PORT`, default 3200 |
+| `pnpm dev` | Dev server on `$PORT`, default 3300 |
 | `pnpm build` / `pnpm start` | Production build and server |
 | `pnpm lint` · `pnpm typecheck` · `pnpm format` | ESLint · `next typegen` + `tsc` · Prettier (with class sorting) |
 
@@ -62,19 +62,28 @@ and share images are resolved against it.
 
 ## Forms
 
-The waitlist and partner enquiry are Server Actions (`src/app/actions.ts`). There is no public
-intake endpoint on the platform yet, so a valid submission is POSTed as JSON to
-`WAITLIST_WEBHOOK_URL` / `PARTNER_WEBHOOK_URL` (with `FORMS_WEBHOOK_SECRET` as a bearer token
-if set). With no webhook configured it is logged to the server console, so the forms work
-locally with nothing else running. Both have a honeypot field against bots.
+The waitlist and partner enquiry are Server Actions (`src/app/actions.ts`). A valid submission
+is sent through the gateway to the admin BFF's intake routes:
 
-The waitlist asks for first name, email and area — the minimum for cohort selection (GRW-01).
+| Form | Route | Owned by |
+|---|---|---|
+| Waitlist | `POST /admin/v1/intake/waitlist` | `vybe-identity-service` (GRW-01) |
+| Partner enquiry | `POST /admin/v1/intake/partner-enquiries` | `vybe-marketplace-service` |
+
+Each call carries `X-Vybe-Intake-Key` (from `VYBE_INTAKE_KEY`, server-side only) and an
+`X-Device-Id` derived from a hash of the visitor, so the platform's rate limit applies per
+visitor rather than to the whole website. Operations works both lists in the backoffice under
+**Leads**.
+
+With `VYBE_API_URL` unset, submissions are logged to the server console instead, so the site
+runs on its own. Both forms have a honeypot field against bots. The waitlist asks for first
+name, email and area — the minimum for cohort selection.
 
 ## Docker
 
 ```bash
 docker build -t vybe-website --build-arg NEXT_PUBLIC_SITE_URL=https://vybe.crokta.com .
-docker run -p 3200:3200 -e VYBE_ENV=production vybe-website
+docker run -p 3300:3300 -e VYBE_ENV=production vybe-website
 ```
 
 Multi-stage, standalone output, runs as a non-root user.

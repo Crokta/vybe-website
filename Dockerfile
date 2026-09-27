@@ -21,14 +21,14 @@ COPY . .
 RUN pnpm build
 
 FROM node:24-alpine AS runtime
-ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3200 HOSTNAME=0.0.0.0
+ENV NODE_ENV=production NEXT_TELEMETRY_DISABLED=1 PORT=3300 HOSTNAME=0.0.0.0
 WORKDIR /app
 RUN addgroup -S -g 10001 vybe && adduser -S -u 10001 -G vybe vybe
 COPY --from=build --chown=vybe:vybe /app/.next/standalone ./
 COPY --from=build --chown=vybe:vybe /app/.next/static ./.next/static
 COPY --from=build --chown=vybe:vybe /app/public ./public
 USER vybe
-EXPOSE 3200
+EXPOSE 3300
 HEALTHCHECK --interval=30s --timeout=3s --start-period=10s \
-  CMD wget -qO- http://127.0.0.1:3200/robots.txt >/dev/null || exit 1
+  CMD wget -qO- http://127.0.0.1:3300/robots.txt >/dev/null || exit 1
 CMD ["node", "server.js"]
