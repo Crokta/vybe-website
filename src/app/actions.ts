@@ -167,7 +167,9 @@ export async function submitPartnerEnquiry(_prev: FormState, data: FormData): Pr
     return {
       status: "error",
       message:
-        outcome === "rate_limited" ? tooMany : "We couldn't send that just now. Please try again, or email us directly.",
+        outcome === "rate_limited"
+          ? tooMany
+          : "We couldn't send that just now. Please try again, or email us directly.",
       values,
     };
   }
