@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Mark } from "@/components/brand/mark";
 import { ButtonLink } from "@/components/ui/button";
 import { site } from "@/lib/site";
+import { appStores } from "@/lib/stores";
 
 /*
  * Where the invitation email lands. Not indexed and not in the sitemap: it only makes sense to
@@ -15,10 +16,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/invited" },
 };
 
-const stores = [
-  { label: "Download on the App Store", href: process.env.NEXT_PUBLIC_APP_STORE_URL },
-  { label: "Get it on Google Play", href: process.env.NEXT_PUBLIC_PLAY_STORE_URL },
-].filter((store): store is { label: string; href: string } => Boolean(store.href));
+const stores = appStores;
 
 const steps = [
   ["Get the app", "VYBE is on iPhone and Android."],
