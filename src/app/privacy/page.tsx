@@ -7,7 +7,7 @@ import { site } from "@/lib/site";
 export const metadata = pageMetadata({
   title: "Privacy commitments",
   description:
-    "The privacy commitments VYBE is built on: minimal data, no background location tracking, no selling your data, clear consent, and pause, export and delete as ordinary controls.",
+    "The privacy commitments VYBE is built on: minimal data, no background location tracking, no selling your data, clear consent, published retention periods, and pause, export and delete as ordinary controls that reach every part of VYBE.",
   path: "/privacy",
 });
 
@@ -39,6 +39,18 @@ const commitments = [
   [
     "Your memories aren't training data",
     "Couple Mode photos and notes are never used for recommendations, advertising or model training.",
+  ],
+  [
+    "Shared doesn't mean merged",
+    "In Couple Mode each of you keeps your own account. Your private notes, location and payment details never become your partner's, and if you leave, what you contributed leaves with you.",
+  ],
+  [
+    "Nothing kept longer than its reason",
+    "Every kind of data has a published retention period and a reason for it. Sensitive requests — to our safety team, or to be introduced to a counsellor or sitter — have their contact details erased on a fixed schedule once they're closed.",
+  ],
+  [
+    "Deleted means deleted, everywhere",
+    "When you close your account, every part of VYBE holding your data is told to remove it, and each has to confirm it did — or state the legal reason it must keep something, like a payment record. If one doesn't confirm in time, it's flagged for our team.",
   ],
   ["Pause, export, delete", "These are ordinary buttons in the app, not a support ticket. Your exit is yours."],
 ];

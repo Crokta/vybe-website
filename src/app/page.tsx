@@ -51,7 +51,7 @@ const faqs: FaqItem[] = [
   },
   {
     q: "What happens if we become a couple?",
-    a: "You can switch on Couple Mode together — both of you have to agree. Your profiles leave discovery and you get a shared space for plans, milestones and memories. Either of you can leave at any time, and your own data always stays yours.",
+    a: "You can switch on Couple Mode together — both of you have to agree, and if you met somewhere else you can invite your partner with a code. Your profiles leave discovery and you get a shared space for date nights, milestones, gifts and guided programmes. Either of you can leave at any time, and your own data always stays yours.",
   },
 ];
 
@@ -511,14 +511,17 @@ function CoupleTeaser() {
             <span className="font-serif font-normal text-rose italic">you don&rsquo;t have to delete us.</span>
           </h2>
           <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
-            Most dating apps lose you the moment they succeed. VYBE becomes the place that holds your plans, milestones
-            and memories — with a clear line between what&rsquo;s shared and what&rsquo;s just yours.
+            Most dating apps lose you the moment they succeed. VYBE becomes the place for your date nights,
+            anniversaries and the work of staying close — with a clear line between what&rsquo;s shared and what&rsquo;s
+            just yours.
           </p>
           <ul className="mt-8 grid gap-3 sm:grid-cols-2">
             {[
               "Both of you have to agree",
-              "Shared plans & calendar",
-              "Milestones worth marking",
+              "Date nights & surprises",
+              "Anniversaries & wishlists",
+              "Guided programmes",
+              "Double dates & sitters",
               "Private notes stay private",
             ].map((item) => (
               <li

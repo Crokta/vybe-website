@@ -32,6 +32,9 @@ export const site = {
     "book a date",
     "date ideas Lagos",
     "couples app",
+    "couples app Nigeria",
+    "date night ideas Lagos",
+    "relationship counselling Lagos",
     "Lagos restaurants for dates",
   ],
   colors: {

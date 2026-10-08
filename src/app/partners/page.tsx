@@ -10,7 +10,7 @@ import { site } from "@/lib/site";
 export const metadata = pageMetadata({
   title: "For venues & partners",
   description:
-    "Partner with VYBE: reach verified Lagos couples and daters at the moment they decide where to go. Confirmed bookings, paid deposits, clear settlement and attributable reporting for restaurants, lounges and experiences.",
+    "Partner with VYBE: reach verified Lagos couples and daters at the moment they decide where to go. Confirmed bookings, paid deposits, clear settlement and attributable reporting for restaurants, lounges, experiences, counsellors and sitters.",
   path: "/partners",
 });
 
@@ -54,7 +54,11 @@ const steps = [
 const faqs: FaqItem[] = [
   {
     q: "What kinds of businesses can partner with VYBE?",
-    a: "Restaurants, bars and lounges, cafés and dessert spots, activities and experiences, live events, staycations and gift providers. Our marketplace is curated — we contract every partner rather than listing anyone who signs up.",
+    a: "Restaurants, bars and lounges, cafés and dessert spots, activities and experiences, live events, staycations and gift providers — and, for couples, relationship counsellors and childcare providers. Our marketplace is curated — we contract every partner rather than listing anyone who signs up.",
+  },
+  {
+    q: "We're counsellors or a childcare agency. How does it work for us?",
+    a: "Couples ask to be put in touch from the app, and our team makes the introduction — we don't take bookings or payments for these. Before you're listed we check counsellors' credentials and meet every sitter, and members see when each check was done.",
   },
   {
     q: "Which areas are you starting with?",

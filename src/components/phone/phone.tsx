@@ -296,3 +296,36 @@ export function CoupleScreen() {
     </div>
   );
 }
+
+export function SurpriseScreen() {
+  return (
+    <div className="flex h-full flex-col px-4 pb-4">
+      <p className="py-2 text-[15px] font-bold">Date night</p>
+      <div className="rounded-3xl bg-ink p-4 text-cream">
+        <p className="text-[10px] font-bold tracking-widest text-amber uppercase">Surprise · Friday 7:30pm</p>
+        <p className="mt-1 font-serif text-[22px] leading-tight italic">Somewhere new. Dress up a little.</p>
+        <p className="mt-2 text-[10.5px] text-cream/70">
+          Tolu said yes to the evening and the dress code. They find out where on Friday at 5pm.
+        </p>
+      </div>
+      <p className="mt-4 text-[10px] font-bold tracking-widest text-muted uppercase">Every other Friday</p>
+      <div className="mt-2 space-y-2">
+        {[
+          ["Rooftop dinner, Ikoyi", "Ideas for the next one · Nothing booked"],
+          ["Pottery for two, Lekki", "From ₦28,000 · Experiences"],
+        ].map(([title, meta]) => (
+          <div key={title} className="flex items-center justify-between rounded-2xl border border-line bg-white p-3">
+            <div>
+              <p className="text-[12.5px] font-bold">{title}</p>
+              <p className="text-[10.5px] text-muted">{meta}</p>
+            </div>
+            <Mark size={20} />
+          </div>
+        ))}
+      </div>
+      <div className="mt-auto rounded-2xl bg-sand p-3 text-[10.5px] leading-snug text-ink/75">
+        <span className="font-bold text-ink">A sitter for date night.</span> Sitters our team has checked, near you.
+      </div>
+    </div>
+  );
+}

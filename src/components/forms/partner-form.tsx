@@ -16,6 +16,8 @@ const categories = [
   "Events / live music",
   "Staycation / hotel",
   "Gifts / florist",
+  "Counselling / therapy",
+  "Childcare / sitters",
   "Other",
 ] as const;
 

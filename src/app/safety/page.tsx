@@ -65,6 +65,10 @@ const layers = [
       ],
       ["Appeals", "If we get an enforcement decision wrong, there's a working way to tell us."],
       ["Evidence handled carefully", "Reports are kept securely and only seen by the people who need to see them."],
+      [
+        "Discreet support",
+        "Worried about a partner? Leave Couple Mode without them being notified, and ask our team to contact you the way you choose.",
+      ],
     ],
   },
 ];
@@ -85,6 +89,10 @@ const faqs: FaqItem[] = [
   {
     q: "Can the person I'm meeting see my location?",
     a: "No. Other members only see an approximate distance band. If you turn on live location for a check-in, it's shared with your trusted contacts only — never with the other person — and it stops when the check-in ends.",
+  },
+  {
+    q: "What if the person I'm worried about is my partner?",
+    a: "From Couple Mode you can leave quietly — they get no notification, email or alert, and find out in the app — and ask our safety team to contact you, privately. Only our team sees the request, we contact no one else, and we never leave voicemails or messages others might see.",
   },
   {
     q: "Is VYBE an emergency service?",
@@ -135,7 +143,7 @@ export default function SafetyPage() {
                 </p>
                 <h2 className="mt-4 text-3xl font-bold tracking-tight sm:text-4xl">{layer.title}</h2>
               </div>
-              <dl className="grid gap-6 sm:grid-cols-3">
+              <dl className="grid gap-6 sm:grid-cols-2 xl:grid-cols-3">
                 {layer.items.map(([title, body]) => (
                   <div key={title}>
                     <dt className="font-bold">{title}</dt>
